@@ -11,7 +11,9 @@
 
 @class Card;
 
-@interface Deck : NSObject
+@interface Deck : NSObject{
+    BOOL      isFirstTime;
+}
 
 
 - (void)shuffle;

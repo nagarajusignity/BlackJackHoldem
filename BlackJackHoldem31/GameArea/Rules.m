@@ -41,7 +41,7 @@ static  Rules * sharedMyManager = nil;
     
     
     customiseAlertView = [[UIView alloc] init];
-    alert_width = 442+70*isiPhone5();
+    alert_width = 442+80*isiPhone5();
     alert_height = 304;//270
     
     customiseAlertView.frame = CGRectMake(((bgView.frame.size.width-alert_width)/2.0), ((bgView.frame.size.height-alert_height)/2.0), alert_width, alert_height);
@@ -53,7 +53,6 @@ static  Rules * sharedMyManager = nil;
     customiseAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     customiseAlertView.layer.cornerRadius = 5;
     customiseAlertView.layer.masksToBounds = NO;
-    //[customiseAlertView addSubview:mainbgView];
     
     /***
     * Close Button
@@ -62,7 +61,6 @@ static  Rules * sharedMyManager = nil;
     UIButton  *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [closeButton addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [closeButton setImage:[UIImage imageNamed:@"cross_icon"] forState:UIControlStateNormal];
-    //[CancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [closeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     closeButton.frame = CGRectMake(402+70*isiPhone5(),10, 30, 30);//135
     closeButton.backgroundColor=[UIColor clearColor];
@@ -72,8 +70,8 @@ static  Rules * sharedMyManager = nil;
      * Scroll
      **/
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(20, 50,412+60*isiPhone5() , 230)];
-    [scrollView setContentSize:CGSizeMake(412+60*isiPhone5() , 2000-200*isiPhone5())];
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 50,422+60*isiPhone5() , 230)];
+    [scrollView setContentSize:CGSizeMake(412+60*isiPhone5() , 1300-150*isiPhone5())];
     scrollView.showsHorizontalScrollIndicator = YES;
     scrollView.indicatorStyle=UIScrollViewIndicatorStyleWhite;
     scrollView.backgroundColor=[UIColor clearColor];
@@ -85,7 +83,7 @@ static  Rules * sharedMyManager = nil;
 
     
     UIImageView *dotBG=[[UIImageView alloc]initWithImage:dot];
-    dotBG.frame=CGRectMake(15, 10,dot.size.width , dot.size.height);
+    dotBG.frame=CGRectMake(5, 10,dot.size.width , dot.size.height);
     [scrollView addSubview:dotBG];
     
     /***
@@ -93,153 +91,211 @@ static  Rules * sharedMyManager = nil;
      **/
     
     UILabel* fisrtLbl = [[UILabel alloc] init];
-    fisrtLbl.frame = CGRectMake(35,5,300 , 24);
+    fisrtLbl.frame = CGRectMake(25,5,300 , 24);
     fisrtLbl.textAlignment = NSTextAlignmentLeft;
     fisrtLbl.textColor = [UIColor  colorWithRed:92.0/255.0f green:237.0/255.0f blue:255.0/255.0f alpha:1.0f];
-    fisrtLbl.font =[UIFont fontWithName:@"TimesNewRomanPSMT" size:20];//TimesNewRomanPSMT
+    fisrtLbl.font =[UIFont fontWithName:@"Arial-BoldMT" size:20];
     fisrtLbl.backgroundColor = [UIColor clearColor];
-    fisrtLbl.text=@"CONTROL OF THE GAME";
+    fisrtLbl.text=@"THE AIM";
     [scrollView addSubview:fisrtLbl];
     
     
-    UITextView *firstText = [[UITextView alloc]initWithFrame:CGRectMake(35,30,350+52*isiPhone5(),280-50*isiPhone5())];
-    firstText.font = [UIFont fontWithName:@"TimesNewRomanPSMT" size:18];
+    UITextView *firstText = [[UITextView alloc]initWithFrame:CGRectMake(25,30,380+52*isiPhone5(),160-50*isiPhone5())];
+    firstText.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
     firstText.backgroundColor = [UIColor clearColor];
     firstText.scrollEnabled = NO;
     firstText.editable = NO;
-    firstText.text=@"1.1 A dealer shall be responsible for the conduct of the game.He shall control all hands and cards,determine winners, and oversee the collection of winnings and the commission. With the exception of tournament 31, the dealer shall not be permitted to participate in the game. In tournament 31, provided the deal is rotated after each round ofplay so that all players take turns in dealing and provided no player is paid to deal the game, the dealer/s may be permitted to participate in the game.";
+    firstText.text=@"The aim of each player is to choose three cards of the SAME SUIT, add the face value of the three cards together to reach a total value of 31 or as close to 31 as possible.The player with the highest total value will be deemed the winner.";
     firstText.textColor = [UIColor whiteColor];
     [scrollView addSubview:firstText];
     
     dotBG=[[UIImageView alloc]initWithImage:dot];
-    dotBG.frame=CGRectMake(15, 310-50*isiPhone5(),dot.size.width , dot.size.height);
+    dotBG.frame=CGRectMake(5, 190+5*isiPhone5()-50,dot.size.width , dot.size.height);
     [scrollView addSubview:dotBG];
     
     fisrtLbl = [[UILabel alloc] init];
-    fisrtLbl.frame = CGRectMake(35,305-50*isiPhone5(),300 , 24);
+    fisrtLbl.frame = CGRectMake(25,185+5*isiPhone5()-50,400 , 24);
     fisrtLbl.textAlignment = NSTextAlignmentLeft;
     fisrtLbl.textColor = [UIColor  colorWithRed:92.0/255.0f green:237.0/255.0f blue:255.0/255.0f alpha:1.0f];
-    fisrtLbl.font =[UIFont fontWithName:@"TimesNewRomanPSMT" size:20];
+    fisrtLbl.font =[UIFont fontWithName:@"Arial-BoldMT" size:20];
     fisrtLbl.backgroundColor = [UIColor clearColor];
-    fisrtLbl.text=@"DECK";
+    fisrtLbl.text=@"THE DEAL";
     [scrollView addSubview:fisrtLbl];
     
-    firstText = [[UITextView alloc]initWithFrame:CGRectMake(35,330-50*isiPhone5(),350+52*isiPhone5(),280-50*isiPhone5())];
-    firstText.font = [UIFont fontWithName:@"TimesNewRomanPSMT" size:18];
+    firstText = [[UITextView alloc]initWithFrame:CGRectMake(25,205+10*isiPhone5()-50,380+52*isiPhone5(),130-20*isiPhone5())];
+    firstText.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
     firstText.backgroundColor = [UIColor clearColor];
     firstText.scrollEnabled = NO;
     firstText.editable = NO;
-    firstText.text=@"2.1 The game is played with a full deck of 52 cards excluding the joker. All cards in a deck shall have backs which are identical in colour and markings.\n 2.2 Whenever a table is opened a new deck of cards shall be used. Upon request players shall be permitted to visually inspect the cards. A new deck of cards shall also be introduced if a majority of players request a change, or if a card or cards become mutilated. Before a new deck is introduced, the old deck shall be proven to be complete by the dealer. The new deck must be of a different colour to the deck previously used. The dealer shall invalidate the outcome of a game if it is established that the deck in use contains an incorrect number of cards.";
+    firstText.text=@"The deal starts with two cards (hole) being dealt to each player face down and five cards being dealt face up on the table as community cards. The community cards are dealt in three sections, the first two cards (the flop), the next two cards (the turn) and the final card (the river).";
     firstText.textColor = [UIColor whiteColor];
     [scrollView addSubview:firstText];
     
     dotBG=[[UIImageView alloc]initWithImage:dot];
-    dotBG.frame=CGRectMake(15, 605-100*isiPhone5(),dot.size.width , dot.size.height);
+    dotBG.frame=CGRectMake(5, 330-50,dot.size.width , dot.size.height);
     [scrollView addSubview:dotBG];
     
     fisrtLbl = [[UILabel alloc] init];
-    fisrtLbl.frame = CGRectMake(35,600-100*isiPhone5(),300 , 24);
+    fisrtLbl.frame = CGRectMake(25,325-50,400 , 24);
     fisrtLbl.textAlignment = NSTextAlignmentLeft;
     fisrtLbl.textColor = [UIColor  colorWithRed:92.0/255.0f green:237.0/255.0f blue:255.0/255.0f alpha:1.0f];
-    fisrtLbl.font =[UIFont fontWithName:@"TimesNewRomanPSMT" size:20];
+    fisrtLbl.font =[UIFont fontWithName:@"Arial-BoldMT" size:20];
     fisrtLbl.backgroundColor = [UIColor clearColor];
-    fisrtLbl.text=@"WAGERS";
+    fisrtLbl.text=@"RULES";
     [scrollView addSubview:fisrtLbl];
     
-    firstText = [[UITextView alloc]initWithFrame:CGRectMake(35,625-100*isiPhone5(),350+52*isiPhone5(),85-10*isiPhone5())];
-    firstText.font = [UIFont fontWithName:@"TimesNewRomanPSMT" size:18];
+    firstText = [[UITextView alloc]initWithFrame:CGRectMake(25,350-50,400+62*isiPhone5(),330-50*isiPhone5())];
+    firstText.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
     firstText.backgroundColor = [UIColor clearColor];
     firstText.scrollEnabled = NO;
     firstText.editable = NO;
-    firstText.text=@"3.1 The minimum and maximum wagers shall be prominently displayed on a sign at the table.";
+    if(isiPhone5())
+    firstText.text=@"1. Each player MUST use cards of the SAME SUIT.\n\n2. Each players hand can consist of a MAXIMUM of 3 cards.\n\n3. Each player MUST use one ( or both ) of their hole cards.\n\n4. Each player is dealt 2 hole cards face down.\n\n5. A Community hand of 5 cards are dealt face up on the table.\n\n6. Each player may only use one or two of the community cards.\n\n7. The winner is the player with the highest total value at the end.";
+    else
+    firstText.text=@"1. Each player MUST use cards of the SAME SUIT.\n\n2. Each players hand can consist of a MAXIMUM of 3 ''''cards.\n\n3. Each player MUST use one ( or both ) of their hole ''''cards.\n\n4. Each player is dealt 2 hole cards face down.\n\n5. A Community hand of 5 cards are dealt face up on ''''the table.\n\n6. Each player may only use one or two of the ''''community cards.\n\n7. The winner is the player with the highest total value ''''at the end.";
     firstText.textColor = [UIColor whiteColor];
     [scrollView addSubview:firstText];
     
     dotBG=[[UIImageView alloc]initWithImage:dot];
-    dotBG.frame=CGRectMake(15, 710-110*isiPhone5(),dot.size.width , dot.size.height);
+    dotBG.frame=CGRectMake(5, 630-50*isiPhone5(),dot.size.width , dot.size.height);
     [scrollView addSubview:dotBG];
     
     fisrtLbl = [[UILabel alloc] init];
-    fisrtLbl.frame = CGRectMake(35,705-110*isiPhone5(),300 , 24);
+    fisrtLbl.frame = CGRectMake(25,625-50*isiPhone5(),400 , 24);
     fisrtLbl.textAlignment = NSTextAlignmentLeft;
     fisrtLbl.textColor = [UIColor  colorWithRed:92.0/255.0f green:237.0/255.0f blue:255.0/255.0f alpha:1.0f];
-    fisrtLbl.font =[UIFont fontWithName:@"TimesNewRomanPSMT" size:20];
+    fisrtLbl.font =[UIFont fontWithName:@"Arial-BoldMT" size:20];
     fisrtLbl.backgroundColor = [UIColor clearColor];
-    fisrtLbl.text=@"AGE LIMITS";
+    fisrtLbl.text=@"THE BET";
     [scrollView addSubview:fisrtLbl];
     
-    firstText = [[UITextView alloc]initWithFrame:CGRectMake(35,730-110*isiPhone5(),350+52*isiPhone5(),100)];
-    firstText.font = [UIFont fontWithName:@"TimesNewRomanPSMT" size:18];
+    firstText = [[UITextView alloc]initWithFrame:CGRectMake(25,650-50*isiPhone5(),400+52*isiPhone5(),170-50*isiPhone5())];
+    firstText.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
     firstText.backgroundColor = [UIColor clearColor];
     firstText.scrollEnabled = NO;
     firstText.editable = NO;
-    firstText.text=@"4.1 Persons under the age of 18 years shall not participate in the game, or be involved in the dealing or conduct of the game.";
+    firstText.text=@"The betting occurs in four rounds, the first after the hole cards are dealt, the second after the flop,the third after the turn and the final round of betting after the river.\n\nA player will have five action choices when it is their turn to play.";
+    firstText.textColor = [UIColor whiteColor];
+    [scrollView addSubview:firstText];
+    
+    fisrtLbl = [[UILabel alloc] init];
+    fisrtLbl.frame = CGRectMake(25,720+70-70*isiPhone5(),400 , 24);
+    fisrtLbl.textAlignment = NSTextAlignmentLeft;
+    fisrtLbl.textColor = [UIColor  colorWithRed:92.0/255.0f green:237.0/255.0f blue:255.0/255.0f alpha:1.0f];
+    fisrtLbl.font =[UIFont fontWithName:@"Arial-BoldMT" size:17];
+    fisrtLbl.backgroundColor = [UIColor clearColor];
+    fisrtLbl.text=@"1. FOLD";
+    [scrollView addSubview:fisrtLbl];
+    
+    firstText = [[UITextView alloc]initWithFrame:CGRectMake(25,740+70-70*isiPhone5(),400+52*isiPhone5(),25)];
+    firstText.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
+    firstText.backgroundColor = [UIColor clearColor];
+    firstText.scrollEnabled = NO;
+    firstText.editable = NO;
+    firstText.text=@"Withdraw from the game and forfeit all credits bet.";
+    firstText.textColor = [UIColor whiteColor];
+    [scrollView addSubview:firstText];
+    
+    fisrtLbl = [[UILabel alloc] init];
+    fisrtLbl.frame = CGRectMake(25,770+70-70*isiPhone5(),400 , 24);
+    fisrtLbl.textAlignment = NSTextAlignmentLeft;
+    fisrtLbl.textColor = [UIColor  colorWithRed:92.0/255.0f green:237.0/255.0f blue:255.0/255.0f alpha:1.0f];
+    fisrtLbl.font =[UIFont fontWithName:@"Arial-BoldMT" size:17];
+    fisrtLbl.backgroundColor = [UIColor clearColor];
+    fisrtLbl.text=@"2. CHECK";
+    [scrollView addSubview:fisrtLbl];
+    
+    firstText = [[UITextView alloc]initWithFrame:CGRectMake(25,790+70-70*isiPhone5(),400+52*isiPhone5(),25)];
+    firstText.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
+    firstText.backgroundColor = [UIColor clearColor];
+    firstText.scrollEnabled = NO;
+    firstText.editable = NO;
+    firstText.text=@"Pass until another player makes a bet.";
+    firstText.textColor = [UIColor whiteColor];
+    [scrollView addSubview:firstText];
+    
+    fisrtLbl = [[UILabel alloc] init];
+    fisrtLbl.frame = CGRectMake(25,820+70-70*isiPhone5(),400 , 24);
+    fisrtLbl.textAlignment = NSTextAlignmentLeft;
+    fisrtLbl.textColor = [UIColor  colorWithRed:92.0/255.0f green:237.0/255.0f blue:255.0/255.0f alpha:1.0f];
+    fisrtLbl.font =[UIFont fontWithName:@"Arial-BoldMT" size:17];
+    fisrtLbl.backgroundColor = [UIColor clearColor];
+    fisrtLbl.text=@"3. CALL";
+    [scrollView addSubview:fisrtLbl];
+    
+    firstText = [[UITextView alloc]initWithFrame:CGRectMake(25,840+70-70*isiPhone5(),400+52*isiPhone5(),25)];
+    firstText.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
+    firstText.backgroundColor = [UIColor clearColor];
+    firstText.scrollEnabled = NO;
+    firstText.editable = NO;
+    firstText.text=@"Match another players bet with an equal sized bet.";
+    firstText.textColor = [UIColor whiteColor];
+    [scrollView addSubview:firstText];
+    
+    fisrtLbl = [[UILabel alloc] init];
+    fisrtLbl.frame = CGRectMake(25,870+70-70*isiPhone5(),400 , 24);
+    fisrtLbl.textAlignment = NSTextAlignmentLeft;
+    fisrtLbl.textColor = [UIColor  colorWithRed:92.0/255.0f green:237.0/255.0f blue:255.0/255.0f alpha:1.0f];
+    fisrtLbl.font =[UIFont fontWithName:@"Arial-BoldMT" size:17];
+    fisrtLbl.backgroundColor = [UIColor clearColor];
+    fisrtLbl.text=@"4. BET";
+    [scrollView addSubview:fisrtLbl];
+    
+    firstText = [[UITextView alloc]initWithFrame:CGRectMake(25,890+70-70*isiPhone5(),400+52*isiPhone5(),60-35*isiPhone5())];
+    firstText.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
+    firstText.backgroundColor = [UIColor clearColor];
+    firstText.scrollEnabled = NO;
+    firstText.editable = NO;
+    firstText.text=@"Raise another players bet with an ammount of your choosing.";
+    firstText.textColor = [UIColor whiteColor];
+    [scrollView addSubview:firstText];
+    
+    fisrtLbl = [[UILabel alloc] init];
+    fisrtLbl.frame = CGRectMake(25,920+90-90*isiPhone5(),400 , 24);
+    fisrtLbl.textAlignment = NSTextAlignmentLeft;
+    fisrtLbl.textColor = [UIColor  colorWithRed:92.0/255.0f green:237.0/255.0f blue:255.0/255.0f alpha:1.0f];
+    fisrtLbl.font =[UIFont fontWithName:@"Arial-BoldMT" size:17];
+    fisrtLbl.backgroundColor = [UIColor clearColor];
+    fisrtLbl.text=@"5.ALLIN";
+    [scrollView addSubview:fisrtLbl];
+    
+    firstText = [[UITextView alloc]initWithFrame:CGRectMake(25,940+90-90*isiPhone5(),400+52*isiPhone5(),25)];
+    firstText.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
+    firstText.backgroundColor = [UIColor clearColor];
+    firstText.scrollEnabled = NO;
+    firstText.editable = NO;
+    firstText.text=@"Bet all the credits you have.";
     firstText.textColor = [UIColor whiteColor];
     [scrollView addSubview:firstText];
     
     dotBG=[[UIImageView alloc]initWithImage:dot];
-    dotBG.frame=CGRectMake(15, 830-110*isiPhone5(),dot.size.width , dot.size.height);
+    dotBG.frame=CGRectMake(5, 980+100-100*isiPhone5(),dot.size.width , dot.size.height);
     [scrollView addSubview:dotBG];
     
     fisrtLbl = [[UILabel alloc] init];
-    fisrtLbl.frame = CGRectMake(35,825-110*isiPhone5(),300 , 24);
+    fisrtLbl.frame = CGRectMake(25,975+100-100*isiPhone5(),400 , 24);
     fisrtLbl.textAlignment = NSTextAlignmentLeft;
     fisrtLbl.textColor = [UIColor  colorWithRed:92.0/255.0f green:237.0/255.0f blue:255.0/255.0f alpha:1.0f];
-    fisrtLbl.font =[UIFont fontWithName:@"TimesNewRomanPSMT" size:20];
+    fisrtLbl.font =[UIFont fontWithName:@"Arial-BoldMT" size:20];
     fisrtLbl.backgroundColor = [UIColor clearColor];
-    fisrtLbl.text=@"ORDER OF HANDS";
+    fisrtLbl.text=@"YOUR HAND";
     [scrollView addSubview:fisrtLbl];
     
-    firstText = [[UITextView alloc]initWithFrame:CGRectMake(35,850-110*isiPhone5(),350+52*isiPhone5(),490-20*isiPhone5())];
-    firstText.font = [UIFont fontWithName:@"TimesNewRomanPSMT" size:18];
+    firstText = [[UITextView alloc]initWithFrame:CGRectMake(25,1000+100-100*isiPhone5(),400+52*isiPhone5(),130)];
+    firstText.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
     firstText.backgroundColor = [UIColor clearColor];
     firstText.scrollEnabled = NO;
     firstText.editable = NO;
-    firstText.text=@"5.1 The point value of the cards contained in the deck shall be as follows :-\n(a) any card from 2 to 10 shall have a point value the same as its face value ;\n(b) any Jack, Queen or King shall have a point value of 10 ; and\n(c) an Ace shall have a value of 11.\n5.2 The total point value of the cards of the players hand shall be the cumulative total of the point value of each card of the same suit.\n5.3 The order of hands in descending order in a game shall be :-\nThree cards, two cards, one card of the same suit,\nAce and two cards value 10   -   total 31\nAce and ten value and nine   -    total 30\nThree cards of value ten        -    total 30\nAce and ten value and eight  -    total 29\nTwo cards value ten and nine -   total 29\n.............................................................................................................................\netc";
+    firstText.text=@"If you use only one card from your hole cards, you can use two cards from the community cards.\n\nIf you use both hole cards, you can only use one card from the community cards.\n\nFor more details see the app/game/tips buttons on the Play Now page.";
     firstText.textColor = [UIColor whiteColor];
-   [scrollView addSubview:firstText];
+    [scrollView addSubview:firstText];
     
-    dotBG=[[UIImageView alloc]initWithImage:dot];
-    dotBG.frame=CGRectMake(15, 1340-130*isiPhone5(),dot.size.width , dot.size.height);
-    [scrollView addSubview:dotBG];
-    
-    fisrtLbl = [[UILabel alloc] init];
-    fisrtLbl.frame = CGRectMake(35,1335-130*isiPhone5(),300 , 24);
-    fisrtLbl.textAlignment = NSTextAlignmentLeft;
-    fisrtLbl.textColor = [UIColor  colorWithRed:92.0/255.0f green:237.0/255.0f blue:255.0/255.0f alpha:1.0f];
-    fisrtLbl.font =[UIFont fontWithName:@"TimesNewRomanPSMT" size:20];
-    fisrtLbl.backgroundColor = [UIColor clearColor];
-    fisrtLbl.text=@"VARIATIONS OF 31";
-    [scrollView addSubview:fisrtLbl];
-    
-    firstText = [[UITextView alloc]initWithFrame:CGRectMake(35,1360-130*isiPhone5(),350+52*isiPhone5(),490-70*isiPhone5())];
-    firstText.font = [UIFont fontWithName:@"TimesNewRomanPSMT" size:18];
+    firstText = [[UITextView alloc]initWithFrame:CGRectMake(25,1100+100-100*isiPhone5(),400+52*isiPhone5(),75)];
+    firstText.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
     firstText.backgroundColor = [UIColor clearColor];
     firstText.scrollEnabled = NO;
     firstText.editable = NO;
-    firstText.text=@"6.1 31 Holdem - An ante, in the form of a small 'blind' and big 'blind' wager, is placed by the two players to the left of the dealer. The dealer deals two cards to each player face down and one at a time, after which a round of betting takes place. The dealer then burns one card and exposes two communal cards, known as the 'flop'. Another round of betting takes place following which the dealer burns another card and exposes another two communal cards known as the 'turn'. Another round of betting takes place before the dealer burns another card and exposes the fifth and final communal card known asthe 'river'. A final round of betting takes place. A player's completed hand shall consist of one or both of the players two hole cards and one or two cards of the 5 communal cards to a maximum of three cards. The combination of cards is required to be cards of the same suit, with the point value of said cards added together to create the highest possible total value.";
-    firstText.textColor = [UIColor whiteColor];
-   [scrollView addSubview:firstText];
-    
-    dotBG=[[UIImageView alloc]initWithImage:dot];
-    dotBG.frame=CGRectMake(15, 1850-200*isiPhone5(),dot.size.width , dot.size.height);
-    [scrollView addSubview:dotBG];
-    
-    fisrtLbl = [[UILabel alloc] init];
-    fisrtLbl.frame = CGRectMake(35,1845-200*isiPhone5(),400 , 24);
-    fisrtLbl.textAlignment = NSTextAlignmentLeft;
-    fisrtLbl.textColor = [UIColor  colorWithRed:92.0/255.0f green:237.0/255.0f blue:255.0/255.0f alpha:1.0f];
-    fisrtLbl.font =[UIFont fontWithName:@"TimesNewRomanPSMT" size:20];
-    fisrtLbl.backgroundColor = [UIColor clearColor];
-    fisrtLbl.text=@"DETERMINATION OF A WINNING HAND";
-    [scrollView addSubview:fisrtLbl];
-    
-    firstText = [[UITextView alloc]initWithFrame:CGRectMake(35,1870-200*isiPhone5(),300+52*isiPhone5(),120)];
-    firstText.font = [UIFont fontWithName:@"TimesNewRomanPSMT" size:18];
-    firstText.backgroundColor = [UIColor clearColor];
-    firstText.scrollEnabled = NO;
-    firstText.editable = NO;
-    firstText.text=@"7.1 The winning hand shall be the hand with the highest total value.\n7.2 The pot shall be shared where there is more than one player with the same highest total value. Suits do not count when determining the winning hand.";
+    firstText.text=@"For more details see the app/game/tips buttons on the Play Now page.";
     firstText.textColor = [UIColor whiteColor];
     [scrollView addSubview:firstText];
     

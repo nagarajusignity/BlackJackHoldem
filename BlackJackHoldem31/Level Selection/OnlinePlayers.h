@@ -8,6 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OnlinePlayers : NSObject
+@interface OnlinePlayers : NSObject<UITableViewDataSource,UITableViewDelegate>
+{
+    UIView                      * view_Background;
+    UIView                      *customiseAlertView;
+    UIView                      *bgView;
+    int                         alert_width;
+    int                         alert_height;
+    UITableView                 *levelsTableView;
+    NSMutableArray              *levelsArray;
+    NSMutableArray              *detailsArray;
 
+}
++ (id)sharedManager;
+@property (nonatomic, retain) UIAlertView *progressView;
+-(void)ShowViewWithPlayersWhoAreOnline:(UIView*)view;
 @end

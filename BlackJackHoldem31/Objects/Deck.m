@@ -17,13 +17,28 @@
 }
 
 - (void)setUpCards
-{
+{   if(isFirstTime==YES)
+    isFirstTime=NO;
+    else
+    isFirstTime=YES;
+    
     for (Suit suit = SuitClubs; suit <= SuitSpades; ++suit)
     {
+        
         for (int value = CardAce /*CardQueen*/; value <= CardKing; ++value)
         {
+            if(isFirstTime==YES){
+            if(value==2||value==3||value==4){
+            }
+            else{
             Card *card = [[Card alloc] initWithSuit:suit value:value];
             [_cards addObject:card];
+            }
+            }
+            else{
+            Card *card = [[Card alloc] initWithSuit:suit value:value];
+            [_cards addObject:card];
+            }
         }
     }
 }

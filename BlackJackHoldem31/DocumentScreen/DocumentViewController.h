@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import<FacebookSDK/FacebookSDK.h>
+
 
 @interface DocumentViewController : UIViewController
 
+{
+    NSMutableArray  *detailsArray;
+    NSMutableArray  *eligibleLevels;
+}
+@property (nonatomic, retain) UIAlertView *progressView;
 @end

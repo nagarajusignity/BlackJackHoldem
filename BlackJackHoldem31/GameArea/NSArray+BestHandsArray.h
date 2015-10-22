@@ -18,4 +18,6 @@
 
 +(NSArray*)bestHandsInTurnCardsWithOpencards:(NSArray*)myOpencards ;
 
++(NSArray*)bestHandsInRiverCardsWithOpencards:(NSArray*)myOpencards ;
+
 @end

@@ -9,6 +9,9 @@
 #import "RegistrationViewController.h"
 #import "AppDelegate.h"
 #import "WebServiceInterface.h"
+#import "AvatarImages.h"
+#import "UIImageView+WebCache.h"
+
 
 @interface RegistrationViewController ()
 
@@ -16,11 +19,24 @@
 
 @implementation RegistrationViewController
 @synthesize progressView;
+@synthesize isFromEdit=_isFromEdit;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    if(_isFromEdit==YES)
+    {
+        objAPI = [WebServiceInterface sharedManager];
+        self.progressView = [objAPI createProgressViewToParentView:self.view withTitle:@"Getting Info"];
+        objAPI.showActivityIndicator = YES;
+        NSString *strConnectionUrl = [NSString stringWithFormat:@"%@",BaseUrl];
+        
+        NSMutableString *postData = [NSMutableString stringWithFormat:@"operation=user_info&user_id=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"UserID"]];
+        [objAPI fetchDataForURL:strConnectionUrl withData:postData withTarget:self withSelector:@selector(jsonDataUserInfoResponse:)];
+        objAPI = nil;
+    }
     
     /***
      * Scroll
@@ -78,7 +94,7 @@
     userName.autocorrectionType=UITextAutocorrectionTypeNo;
     userName.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     userName.font=[UIFont fontWithName:@"ProximaNova-Regular" size:20.0];
-    //[userName addTarget:self action:@selector(textFieldDone:) forControlEvents:UIControlEventEditingDidEndOnExit];
+    userName.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [scrollView addSubview:userName];
     
     TFBg=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"loginfield"]];
@@ -102,7 +118,7 @@
     password.autocorrectionType=UITextAutocorrectionTypeNo;
     password.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     password.font=[UIFont fontWithName:@"ProximaNova-Regular" size:20.0];
-    //[password addTarget:self action:@selector(textFieldDone:) forControlEvents:UIControlEventEditingDidEndOnExit];
+    password.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [scrollView addSubview:password];
     
     TFBg=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"loginfield"]];
@@ -122,12 +138,12 @@
     countryName.delegate=self;
     countryName.tag=333;
     countryName.clearButtonMode=YES;
-    countryName.placeholder =@"Country Name";
+    countryName.placeholder =@"Country";
     countryName.returnKeyType = UIReturnKeyNext;
     countryName.autocorrectionType=UITextAutocorrectionTypeNo;
     countryName.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     countryName.font=[UIFont fontWithName:@"ProximaNova-Regular" size:20.0];
-    //[password addTarget:self action:@selector(textFieldDone:) forControlEvents:UIControlEventEditingDidEndOnExit];
+    countryName.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [scrollView addSubview:countryName];
     
     
@@ -150,9 +166,9 @@
     email.placeholder =@"Email";
     email.returnKeyType = UIReturnKeyDone;
     email.autocorrectionType=UITextAutocorrectionTypeNo;
+    email.autocapitalizationType = UITextAutocapitalizationTypeNone;
     email.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     email.font=[UIFont fontWithName:@"ProximaNova-Regular" size:20.0];
-    //[password addTarget:self action:@selector(textFieldDone:) forControlEvents:UIControlEventEditingDidEndOnExit];
     [scrollView addSubview:email];
     
     TFBg=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"loginfield"]];
@@ -171,12 +187,12 @@
     NickName.delegate=self;
     NickName.tag=555;
     NickName.clearButtonMode=YES;
-    NickName.placeholder =@"NickName";
+    NickName.placeholder =@"GameName";
     NickName.returnKeyType = UIReturnKeyDone;
     NickName.autocorrectionType=UITextAutocorrectionTypeNo;
+    NickName.autocapitalizationType = UITextAutocapitalizationTypeNone;
     NickName.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     NickName.font=[UIFont fontWithName:@"ProximaNova-Regular" size:12.0];
-    //[password addTarget:self action:@selector(textFieldDone:) forControlEvents:UIControlEventEditingDidEndOnExit];
     [scrollView addSubview:NickName];
     
     
@@ -199,14 +215,12 @@
     [profileImageButton setBackgroundImage:[UIImage imageNamed:@"dummy_image"] forState:UIControlStateNormal];
     
     profileImageButton.frame = CGRectMake(30+40*isiPhone5(), 115+5*isiPhone5(),uploadImage.size.width , uploadImage.size.height);
+    
     [scrollView addSubview:profileImageButton];
     
     UIImageView *uploadImageViewBG=[[UIImageView alloc]initWithImage:uploadImage];
     uploadImageViewBG.frame=CGRectMake(30+40*isiPhone5(), 115+5*isiPhone5(),uploadImage.size.width , uploadImage.size.height);
     [scrollView addSubview:uploadImageViewBG];
-    
-    
-    
     
     /***
      * Upload iMage Label
@@ -223,12 +237,26 @@
     
     
     /***
+     * Avatar Profile Image Button
+     **/
+    UIImage *chooseImage =[UIImage imageNamed:@"Choose-Avatar"];
+    
+    avatarImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [avatarImageButton addTarget:self
+                           action:@selector(avatarImageButtonPressed)
+                 forControlEvents:UIControlEventTouchUpInside];
+    avatarImageButton.backgroundColor =[UIColor clearColor];
+    [avatarImageButton setBackgroundImage:[UIImage imageNamed:@"client2"] forState:UIControlStateNormal];//Choose-Avatar
+    avatarImageButton.frame = CGRectMake(135+45*isiPhone5(), 115+5*isiPhone5(),chooseImage.size.width , chooseImage.size.height);
+    [scrollView addSubview:avatarImageButton];
+    
+    /***
      * Choose Avtar IMage ImageView
      **/
     
-    UIImage *chooseImage =[UIImage imageNamed:@"Choose-Avatar"];
-    UIImageView *chooseImageViewBG=[[UIImageView alloc]initWithImage:chooseImage];
-    chooseImageViewBG.frame=CGRectMake(130+45*isiPhone5(), 120,chooseImage.size.width , chooseImage.size.height);
+    UIImage *avatarRect =[UIImage imageNamed:@"Avatarect.png"];
+    chooseImageViewBG=[[UIImageView alloc]initWithImage:avatarRect];
+    chooseImageViewBG.frame=CGRectMake(130+45*isiPhone5(), 115+5*isiPhone5(),avatarRect.size.width , avatarRect.size.height);
     [scrollView addSubview:chooseImageViewBG];
 
     /***
@@ -275,6 +303,40 @@
     [scrollView addSubview:cancelButton];
     
 }
+-(void)viewWillAppear:(BOOL)animated
+{
+     [super viewWillAppear:animated];
+}
+-(void)jsonDataUserInfoResponse:(id)responseDict
+{
+    //NSLog(@"responseDict....%@",responseDict);
+    objAPI = [WebServiceInterface sharedManager];
+    [objAPI hideProgressView:self.progressView];
+    detailsArray =[[NSMutableArray alloc]init];
+    [detailsArray addObjectsFromArray:[responseDict valueForKey:@"data"]];
+    
+    if(_isFromEdit)
+    {
+        userName.text=[NSString stringWithFormat:@"%@",[[detailsArray valueForKey:@"username"] objectAtIndex:0]];
+        password.text=@"..."; //[NSString stringWithFormat:@"%@",[[detailsArray valueForKey:@"password"] objectAtIndex:0]];
+        countryName.text=[NSString stringWithFormat:@"%@",[[detailsArray valueForKey:@"country_name"] objectAtIndex:0]];
+        email.text=[NSString stringWithFormat:@"%@",[[detailsArray valueForKey:@"email"] objectAtIndex:0]];
+        NickName.text=[NSString stringWithFormat:@"%@",[[detailsArray valueForKey:@"nick_name"] objectAtIndex:0]];
+        NSURL *myurl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseProfileImageUrl,[[detailsArray valueForKey:@"user_image"] objectAtIndex:0]]];
+        NSLog(@"myurl %@",myurl);
+        UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:myurl]];
+        [profileImageButton setImage:image forState:UIControlStateNormal];
+        
+        upload_ImageView =[[UIImageView alloc]init];
+        upload_ImageView.image=image;
+        
+        
+        NSURL *avatarurl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseImageUrl,[[detailsArray valueForKey:@"user_dummy_image"] objectAtIndex:0]]];
+        UIImage *avatarImage = [UIImage imageWithData: [NSData dataWithContentsOfURL:avatarurl]];
+        [avatarImageButton setImage:avatarImage forState:UIControlStateNormal];
+        avtarName =[NSString stringWithFormat:@"%@",[[detailsArray valueForKey:@"user_dummy_image"] objectAtIndex:0]];
+    }
+}
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
@@ -294,9 +356,10 @@
     NSString *countrynameText = [[countryName text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *emailText = [[email text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *nickNameText = [[NickName text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *avatarText = [avtarName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
   
     
-    if ( usernameText.length == 0 || passwordText.length == 0||countrynameText.length==0 || emailText.length ==0 || nickNameText.length==0)
+    if ( usernameText.length == 0 || passwordText.length == 0||countrynameText.length==0 || emailText.length ==0 || nickNameText.length==0||avatarText.length==0)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert!"
                                                         message:@"Please Fill All Details"
@@ -316,23 +379,51 @@
        }
         else
         {
-        WebServiceInterface *objAPI = [WebServiceInterface sharedManager];
+            
+         if(_isFromEdit==YES)
+         {
+             if([passwordText  isEqualToString: @"..."])
+                 passwordText =@"";
+                 
+             objAPI = [WebServiceInterface sharedManager];
+             self.progressView = [objAPI createProgressViewToParentView:self.view withTitle:@"Loading..."];
+             objAPI.showActivityIndicator = YES;
+             NSString *strConnectionUrl = [NSString stringWithFormat:@"%@",BaseUrl];
+             
+             NSMutableString *postData = [NSMutableString stringWithFormat:@"operation=update_profileInfo&username=%@&password=%@&country_name=%@&email=%@&user_type=App&fb_id=%@&deviceid=%@&devicetoken=%@&devicetype=%@&nick_name=%@&avtar_image=%@&user_id=%@",usernameText,passwordText,countrynameText,emailText,@"1",@"1",@"1",@"1",nickNameText,avatarText,[[NSUserDefaults standardUserDefaults]valueForKey:@"UserID"]];
+             NSLog(@"postData---> = %@",postData);
+             if (upload_ImageView.image)
+             {
+                 fileName=@"Sample.png";
+                 appDelegate().fileName=fileName;
+                 UIImage *small = [UIImage imageWithCGImage:[upload_ImageView.image CGImage]scale:0.01 orientation:NO];
+                 objAPI.imageData = UIImagePNGRepresentation(small);
+                 [postData appendString:[NSString stringWithFormat:@"&uploadfile=%@",fileName]];
+                 NSLog(@"Image %@",postData);
+             }
+             [objAPI fetchDataForURL:strConnectionUrl withData:postData withTarget:self withSelector:@selector(jsonDataRegistrationResponse:)];
+             objAPI = nil;
+         }
+        else
+        {
+        objAPI = [WebServiceInterface sharedManager];
         self.progressView = [objAPI createProgressViewToParentView:self.view withTitle:@"Loading..."];
         objAPI.showActivityIndicator = YES;
         NSString *strConnectionUrl = [NSString stringWithFormat:@"%@",BaseUrl];
         
-        NSMutableString *postData = [NSMutableString stringWithFormat:@"operation=registration&username=%@&password=%@&country_name=%@&email=%@&user_type=App&fb_id=%@&deviceid=%@&devicetoken=%@&devicetype=%@",usernameText,passwordText,countrynameText,emailText,@"1",@"1",@"1",@"1"];
+        NSMutableString *postData = [NSMutableString stringWithFormat:@"operation=registration&username=%@&password=%@&country_name=%@&email=%@&user_type=App&fb_id=%@&deviceid=%@&devicetoken=%@&devicetype=%@&nick_name=%@&avtar_image=%@",usernameText,passwordText,countrynameText,emailText,@"1",@"1",@"1",@"1",nickNameText,avatarText];
         NSLog(@"postData---> = %@",postData);
             if (upload_ImageView.image)
             {
-                
-                UIImage *small = [UIImage imageWithCGImage:[upload_ImageView.image CGImage]scale:0.01 orientation:NO];
-                objAPI.imageData = UIImagePNGRepresentation(small);
-                [postData appendString:[NSString stringWithFormat:@"&uploadfile=%@",fileName]];
-                NSLog(@"Image %@",postData);
+                   appDelegate().fileName=fileName;
+                    UIImage *small = [UIImage imageWithCGImage:[upload_ImageView.image CGImage]scale:0.01 orientation:NO];
+                    objAPI.imageData = UIImagePNGRepresentation(small);
+                    [postData appendString:[NSString stringWithFormat:@"&uploadfile=%@",fileName]];
+                    NSLog(@"Image %@",postData);
             }
         [objAPI fetchDataForURL:strConnectionUrl withData:postData withTarget:self withSelector:@selector(jsonDataRegistrationResponse:)];
         objAPI = nil;
+        }
         }
     }
     
@@ -342,8 +433,7 @@
 
 {
     NSLog(@"responseDict....%@",responseDict);
-    
-    WebServiceInterface *objAPI = [WebServiceInterface sharedManager];
+    objAPI = [WebServiceInterface sharedManager];
     [objAPI hideProgressView:self.progressView];
     
     if([[responseDict valueForKey:@"success"]integerValue ]==1)
@@ -359,6 +449,10 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Confirmation" message:[responseDict valueForKey:@"description"] delegate:nil
                                                    cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
         [alert show];
+    }
+    else
+    {
+        
     }
     
 
@@ -415,19 +509,14 @@
         fileName = [representation filename];
         appDelegate().fileName =[NSString stringWithFormat:@"%@",fileName];
         NSLog(@"fileName : %@",fileName);
+        //NSData *imgData= UIImagePNGRepresentation(image);
+        
+        
     };
     ALAssetsLibrary* assetslibrary = [[ALAssetsLibrary alloc] init];
     [assetslibrary assetForURL:imageURL
                    resultBlock:resultblock
                   failureBlock:nil];
-    //UIImage *image=[self scaleAndRotateImage: [info objectForKey:UIImagePickerControllerOriginalImage]];
-
-//    UIImage *originalImage =image;
-//    CGSize destinationSize =CGSizeMake(81, 91);
-//    UIGraphicsBeginImageContext(destinationSize);
-//    [originalImage drawInRect:CGRectMake(0,0,destinationSize.width,destinationSize.height)];
-//    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
     upload_ImageView =[[UIImageView alloc]init];
     [profileImageButton setBackgroundImage:image forState:UIControlStateNormal];
     upload_ImageView.image=image;
@@ -558,7 +647,10 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     NSUInteger newLength = [textField.text length] + [string length] - range.length;
-    return (newLength > 36) ? NO : YES;
+    if(textField==NickName)
+        return (newLength > 8) ? NO : YES;
+    else
+        return (newLength > 36) ? NO : YES;
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)sender
@@ -635,6 +727,23 @@
     }
     
     return YES;
+}
+-(void)avatarImageButtonPressed
+{
+    AvatarImages *images =[AvatarImages sharedManager];
+    [images ShowViewWithImages:self.view];
+    images.callBack = ^(NSString *ImageName)
+    {
+        avtarName = ImageName;
+        NSLog(@"ImageName %@",ImageName);
+        
+        NSURL *myurl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseImageUrl,ImageName]];
+        UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:myurl]];
+        [avatarImageButton setImage:image forState:UIControlStateNormal];
+        
+       // [avatarImageButton.imageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseImageUrl,ImageName]] placeholderImage:[UIImage imageNamed:@"Image.png"]];
+        
+    };
 }
 
 

@@ -9,5 +9,13 @@
 #import <Foundation/Foundation.h>
 
 @interface GameButtonDetails : NSObject
-
+{
+    UIView                      * view_Background;
+    UIView                      *customiseAlertView;
+    UIView                      *bgView;
+    int                         alert_width;
+    int                         alert_height;
+}
++ (id)sharedManager;
+-(void)ShowViewWithGameDetails:(UIView*)view;
 @end

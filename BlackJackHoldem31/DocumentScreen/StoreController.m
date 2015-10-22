@@ -93,7 +93,6 @@
 
 #import "StoreController.h"
 #import "AppDelegate.h"
-#import "MainMenuViewController.h"
 
 NSString * const IAPFailedNotification              = @"IAPFailedNotification";
 NSString * const IAPSuccessNotification             = @"IAPSuccessfulNotification";
@@ -131,14 +130,7 @@ static StoreController *storeControllerSingleton;
 - (void)unlockFeature:(SKPaymentTransaction *)transaction
 {
     Log(@"Unlocked feature for %@", transaction.payment.productIdentifier);
-    MainMenuViewController *menu=[[MainMenuViewController alloc]init];
-    if([transaction.payment.productIdentifier isEqualToString:IAP_PRODUCT_ID_REGULAR])
-    {
-        NSLog(@"postNotificationName");
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FullVersion"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"HideButton" object:menu];
-    }
+    
 }
 
 
@@ -210,8 +202,6 @@ static StoreController *storeControllerSingleton;
 {
 	Log(@"Error=%@", error);
     appDelegate().window.userInteractionEnabled=YES;
-    appDelegate().activityIndicator.hidden=YES;
-    [appDelegate().activityIndicator startAnimating];
 }
 
 
@@ -220,8 +210,6 @@ static StoreController *storeControllerSingleton;
 {
     Log();
     appDelegate().window.userInteractionEnabled=YES;
-    appDelegate().activityIndicator.hidden=YES;
-    [appDelegate().activityIndicator startAnimating];
 
 }
 

@@ -13,12 +13,20 @@
 @implementation Player
 @synthesize position = _position;
 @synthesize name = _name;
-@synthesize peerID = _peerID;
+@synthesize Image=_image;
+@synthesize Score=_score;
+@synthesize ID = _ID;
 @synthesize receivedResponse = _receivedResponse;
 @synthesize gamesWon = _gamesWon;
 @synthesize closedCards = _closedCards;
 @synthesize openCards = _openCards;
-
+@synthesize bigBlind=_bigBlind;
+@synthesize smallBlind=_smallBlind;
+@synthesize dealer=_dealer;
+@synthesize status=_status;
+@synthesize serverindex=_serverindex;
+@synthesize allin=_allin;
+@synthesize bet=_bet;
 - (id)init
 {
     if ((self = [super init]))
@@ -39,7 +47,6 @@
 - (Card *)turnOverTopCard
 {
     NSAssert([self.closedCards cardCount] > 0, @"No more cards");
-    
     Card *card = [self.closedCards topmostCard];
     card.isTurnedOver = YES;
     [self.openCards addCardToTop:card];
@@ -79,7 +86,6 @@
         [otherPlayer.closedCards addCardToBottom:card];
         [movedCards addObject:card];
     }
-    
     [self.openCards removeAllCards];
     return movedCards;
 }

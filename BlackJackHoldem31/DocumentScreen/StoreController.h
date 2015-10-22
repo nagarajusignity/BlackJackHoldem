@@ -99,9 +99,11 @@ NSString * const IAPSuccessNotification;
 NSString * const IAPDownloadCompleteNotification;
 
 
-#define APPSTORE_APP_ID             @"891554380"
-#define IAP_PRODUCT_ID_REGULAR      @"com.peekoboo.fullversion"
-#define IAP_PRODUCT_ID_HOSTED       @"com.mycompany.iapsample.iapproduct.hosted"
+#define APPSTORE_APP_ID             @"945328960"
+#define IAP_PRODUCT_ID_TYPEONE      @"com.blackjack.firsttier"
+#define IAP_PRODUCT_ID_TYPETWO      @"com.blackjack.secondtier"
+#define IAP_PRODUCT_ID_TYPETHREE    @"com.signity.thirdtier"
+#define IAP_PRODUCT_ID_TYPEFOUR     @"com.blackjack.fourthtier"
 
 @interface StoreController : NSObject<SKPaymentTransactionObserver>
 

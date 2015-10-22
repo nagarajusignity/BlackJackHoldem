@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WebServiceInterface.h"
 
-@interface InappPurchaseView : UIViewController
-
+@interface InappPurchaseView : UIViewController<SKStoreProductViewControllerDelegate,SKProductsRequestDelegate,UIAlertViewDelegate>
+{
+    WebServiceInterface        *objAPI;
+    int                        buttonTag;
+}
+@property (nonatomic, retain) UIAlertView *progressView;
 @end

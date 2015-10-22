@@ -9,7 +9,49 @@
 #ifndef BlackJackHoldem31_PrefixHeader_pch
 #define BlackJackHoldem31_PrefixHeader_pch
 
+#endif
+
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 
+
+#define kGoogleWebSite					@"www.google.co.in"
+
+#define kNetworkStatusTitle				@"NetWorkStatus"
+#define kNetworkStatusMessage			@"Internet Connection Required"
+#define kWarningTitle					@"Alert"
+#define kErrorTitle						@"Error"
+#define BaseUrl                         @"http://signitysolutions.co.in/dev/blackjack/black_jack.php"
+#define BaseImageUrl                    @"http://signitysolutions.co.in/dev/blackjack/images/"
+#define BaseProfileImageUrl             @"http://signitysolutions.co.in/dev/blackjack/images/profile_pic/"
+
+
+
+
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "PNImports.h"
 #endif
+
+typedef enum
+{
+    QuitReasonNoNetwork,          // no Wi-Fi or Bluetooth
+    QuitReasonConnectionDropped,  // communication failure with server
+    QuitReasonUserQuit,           // the user terminated the connection
+    QuitReasonServerQuit,         // the server quit the game (on purpose)
+}
+QuitReason;
+
+#import <UIKit/UIKit.h>
+#import <StoreKit/StoreKit.h>
+
+#define Log(fmt, ...) NSLog((@"%s " fmt), __PRETTY_FUNCTION__, ##__VA_ARGS__);
+// Returns a random number between 0.0 and 1.0 (inclusive).
+#define RANDOM_FLOAT() ((float)arc4random()/0xFFFFFFFFu)
+
+// Returns a random number between 0 and n (inclusive).
+#define RANDOM_INT(n) (arc4random() % (n + 1))
+
+

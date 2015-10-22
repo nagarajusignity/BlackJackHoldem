@@ -27,11 +27,20 @@ PlayerPosition;
 
 @property (nonatomic, assign) PlayerPosition position;
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *Score;
+@property (nonatomic, copy) NSString *Image;
+@property (nonatomic, copy) NSString *bigBlind;
+@property (nonatomic, copy) NSString *smallBlind;
+@property (nonatomic, copy) NSString *dealer;
+@property (nonatomic, copy) NSString *status;
+@property (nonatomic, copy) NSString *serverindex;
+@property (nonatomic, copy) NSString *allin;
+@property (nonatomic, copy) NSString *bet;
 @property (nonatomic, assign) BOOL receivedResponse;
 @property (nonatomic, assign) int gamesWon;
 @property (nonatomic, strong, readonly) Stack *closedCards;
 @property (nonatomic, strong, readonly) Stack *openCards;
-@property (nonatomic, copy) NSString *peerID;
+@property (nonatomic, copy) NSString *ID;
 
 - (Card *)turnOverTopCard;
 - (BOOL)shouldRecycle;

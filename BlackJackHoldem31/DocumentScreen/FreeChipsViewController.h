@@ -9,5 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @interface FreeChipsViewController : UIViewController
-
+{
+    UIButton          *checkBox;
+    NSTimer           *timer;
+}
+@property (nonatomic, retain) UIAlertView *progressView;
+-(void)updateCounter:(NSTimer *)theTimer;
+-(void)countdownTimer;
 @end

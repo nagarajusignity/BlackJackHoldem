@@ -9,7 +9,9 @@
 #import "SelectViewController.h"
 #import "GameAreaViewController.h"
 #import "DocumentViewController.h"
-#import "LevelselectionViewController.h"
+#import "Buy-InViewController.h"
+#import "RegistrationViewController.h"
+#import "LoginViewController.h"
 #import "AppDelegate.h"
 
 @interface SelectViewController ()
@@ -70,46 +72,73 @@
     
     
     /***
-     * Back Button
+     * Logout Button
      **/
     
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backButton addTarget:self
-                   action:@selector(backButtonPressed)
+    UIButton *logoutButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [logoutButton addTarget:self
+                   action:@selector(logoutButtonPressed)
          forControlEvents:UIControlEventTouchUpInside];
-    backButton.backgroundColor =[UIColor clearColor];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
-    //[backButton setTitle:@"Back" forState:UIControlStateNormal];
-    //[backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    //backButton.titleLabel.font=[UIFont fontWithName:@"Arial-BoldMT" size:20];
-    backButton.frame = CGRectMake(20, 15, 60, 22);
-    [self.view addSubview:backButton];
-
+    logoutButton.backgroundColor =[UIColor clearColor];
+    [logoutButton setBackgroundImage:[UIImage imageNamed:@"logout"] forState:UIControlStateNormal];
+    logoutButton.frame = CGRectMake(20, 15, 25, 26);
+    [self.view addSubview:logoutButton];
+    
+    if(![[NSUserDefaults standardUserDefaults]boolForKey:@"Facebook"])
+    {
+    /***
+     * Settings Button
+     **/
+    
+    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [settingsButton addTarget:self
+                     action:@selector(settingsButtonPressed)
+           forControlEvents:UIControlEventTouchUpInside];
+    settingsButton.backgroundColor =[UIColor clearColor];
+    [settingsButton setBackgroundImage:[UIImage imageNamed:@"setting"] forState:UIControlStateNormal];
+    settingsButton.frame = CGRectMake(440+68*isiPhone5(), 15, 25, 26);
+    [self.view addSubview:settingsButton];
+    }
 }
 
 #pragma mark Back Button Action
 
--(void)backButtonPressed
-
+-(void)logoutButtonPressed{
+    UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"Confirmation" message:@"Are you sure to logout ?" delegate:self cancelButtonTitle:nil otherButtonTitles:@"No",@"Yes", nil];
+    alert.tag=111;
+    [alert show];
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(alertView.tag==111&&buttonIndex==1){
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"KeepLogin"];
+        [[NSUserDefaults standardUserDefaults]setValue:0 forKey:@"UserID" ];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        LoginViewController *loginview =[[LoginViewController alloc]init];
+        [self.navigationController pushViewController:loginview animated:NO];
+    }
+}
+-(void)settingsButtonPressed
 {
-    [self.navigationController popViewControllerAnimated:NO];
+    RegistrationViewController *detailsView =[[RegistrationViewController alloc]init];
+    detailsView.isFromEdit=YES;
+    [self.navigationController pushViewController:detailsView animated:NO];
 }
 
 #pragma mark Play Button Action
 
--(void)playNowPressed
-{
-//    GameAreaViewController *gameArea =[[GameAreaViewController alloc]init];
-//    [self.navigationController pushViewController:gameArea animated:NO];
-    
-    LevelselectionViewController *levelSelect =[[LevelselectionViewController alloc]init];
-    [self.navigationController pushViewController:levelSelect animated:NO];
+-(void)playNowPressed{
+    NSMutableArray *allViewControllers = [NSMutableArray arrayWithArray:[self.navigationController viewControllers]];
+    NSLog(@"allViewControllers %@",allViewControllers);
+    Buy_InViewController *buyin=[[Buy_InViewController alloc]init];
+    buyin.isFromPlayNow=YES;
+    buyin.isFromDocument=NO;
+    [self.navigationController pushViewController:buyin animated:NO];
 }
 
 #pragma mark Document Button Action
 
--(void)docButtonPressed
-{
+-(void)docButtonPressed{
     DocumentViewController *documentView =[[DocumentViewController alloc]init];
     [self.navigationController pushViewController:documentView animated:NO];
 }

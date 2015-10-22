@@ -1159,7 +1159,7 @@ typedef NS_OPTIONS(NSUInteger, PNLoggerConfiguration) {
         [PNBitwiseHelper addTo:&level bit:PNLogConnectionLayerHTTPLoggingLevel];
     #endif
     
-    [[self class] enableFor:level];
+    [[self class] disableFor:level];
 }
 
 - (void)prepareForAsynchronousFileProcessing {

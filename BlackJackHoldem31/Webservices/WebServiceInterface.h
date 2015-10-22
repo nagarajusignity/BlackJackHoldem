@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "IndicatorView.h"
 @class Reachability;
 @interface WebServiceInterface : NSObject
 {
@@ -19,7 +18,6 @@
      Reachability *reach;
     
     UIAlertView *av;
-    IndicatorView *activityIndicatorView;
     BOOL showActivityIndicator;
     UIAlertView *Alert_UesrLocation;
 }
@@ -27,12 +25,10 @@
 @property(nonatomic,retain)NSURLConnection *m_connection;
 @property(nonatomic)BOOL showActivityIndicator;
 @property(nonatomic,retain)NSData *imageData;
-@property(nonatomic,retain)IndicatorView *activityIndicatorView;
 
 -(void)fetchDataForURL:(NSString*)connectionURL withData:(NSString*)strData withTarget:(id)callBackTarget withSelector:(SEL)callBackSelector;
 -(void)setTarget:(id)callBackTarget withSelector:(SEL)callBackSelector;
 -(void)LoadingView;
--(void)removeLoadingView;
 - (UIAlertView *)createProgressViewToParentView:(UIView *)view withTitle:(NSString *)title;
 
 - (void)hideProgressView:(UIAlertView *)inProgressView;

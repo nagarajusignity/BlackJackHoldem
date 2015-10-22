@@ -9,5 +9,14 @@
 #import <Foundation/Foundation.h>
 
 @interface EmptyChairs : NSObject
+{
+UIView                      * view_Background;
+UIView                      *customiseAlertView;
+UIView                      *bgView;
+int                         alert_width;
+int                         alert_height;
 
+}
++ (id)sharedManager;
+-(void)ShowViewWithEmptyChairsImage:(UIView*)view;
 @end

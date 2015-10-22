@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import<FacebookSDK/FacebookSDK.h>
 
-@interface LoginViewController : UIViewController<UITextFieldDelegate>
-{
-    UIButton *rememberButton;
+@interface LoginViewController : UIViewController<UITextFieldDelegate>{
+    UIButton     *rememberButton;
 }
+@property (nonatomic, retain) UIAlertView *progressView;
 @end

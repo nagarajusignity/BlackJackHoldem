@@ -110,11 +110,11 @@
 
 - (void)updateProgressCircle:(NSTimer *)timer{
     //update progress value
-   // NSLog(@"the Current time_______________%f",self.player.currentTime);
-  //  NSLog(@"the Duration time_______________%f",self.player.duration);
+    // NSLog(@"the Current time_______________%f",self.player.currentTime);
+    //  NSLog(@"the Duration time_______________%f",self.player.duration);
     
-    //self.progress = (float) (self.player.currentTime / self.player.duration*1);
-      self.progress = (float) (self.player.currentTime / 6.3);
+    self.progress = (float) (self.player.currentTime / self.player.duration*1.2);
+     // self.progress = (float) (self.player.currentTime / 6.3);
     if (self.delegate && [self.delegate conformsToProtocol:@protocol(CircularProgressViewDelegate)]) {
         [self.delegate updateProgressViewWithPlayer:self.player];
     }

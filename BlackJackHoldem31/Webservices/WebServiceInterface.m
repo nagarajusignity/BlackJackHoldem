@@ -18,7 +18,6 @@
 @synthesize m_connection;
 @synthesize showActivityIndicator;
 @synthesize imageData;
-@synthesize activityIndicatorView;
 
 
 static WebServiceInterface* sharedMyManager = nil;
@@ -46,13 +45,8 @@ static WebServiceInterface* sharedMyManager = nil;
 #pragma mark store
 -(void)fetchDataForURL:(NSString*)connectionURL withData:(NSString*)strData withTarget:(id)callBackTarget withSelector:(SEL)callBackSelector
 {
-    
-    
+    [self closeFunction];
     appDelegate().window.userInteractionEnabled = NO;
-    if(showActivityIndicator)
-    {
-       // [self LoadingView];
-    }    
     m_callBackTarget = callBackTarget;
 	m_callBackSelector = callBackSelector;
     
@@ -64,12 +58,12 @@ static WebServiceInterface* sharedMyManager = nil;
         NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
         [theRequest addValue:contentType forHTTPHeaderField:@"Content-Type"];
         [data appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-        [data appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"uploadfile\"; filename=\"%@\"\r\n", appDelegate().fileName] dataUsingEncoding:NSUTF8StringEncoding]];
-        
-        
-        [data appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-        [data appendData:[NSData dataWithData:imageData]];
+            NSString *filename =appDelegate().fileName;
+            [data appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"uploadfile\"; filename=\"%@\"\r\n", filename] dataUsingEncoding:NSUTF8StringEncoding]];
+            [data appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+            [data appendData:[NSData dataWithData:imageData]];
         NSArray *postData = [strData componentsSeparatedByString:@"&"];
+        NSLog(@"postData %@",postData);
         for (int i = 0; i < [postData count]; i++)
         {
             NSString *tempString = [postData objectAtIndex:i];
@@ -80,13 +74,11 @@ static WebServiceInterface* sharedMyManager = nil;
                 [data appendData:[[NSString stringWithFormat:@"%@",tempArray[1]] dataUsingEncoding:NSUTF8StringEncoding]];
                 [data appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
             }
-            
         }
     }
+    
     else
     [data appendData:[strData dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    
 	[theRequest setHTTPBody:data];
 	[theRequest setHTTPMethod:@"POST"];
 	if(m_connection)
@@ -96,29 +88,25 @@ static WebServiceInterface* sharedMyManager = nil;
 	}
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	
+	reach = [Reachability reachabilityWithHostName:@"www.google.co.in"];
 	
-    
-//	reach = [Reachability reachabilityWithHostName:@"www.google.co.in"];
-//	
-//	if (reach != nil)
-//	{
-//		NetworkStatus internetStatus = [reach currentReachabilityStatus];
-//		
-//		if (( internetStatus != ReachableViaWiFi) && (internetStatus != ReachableViaWWAN))
-//		{
-//            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-//            UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"NetWorkStatus" message:@"Internet Connection Required" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-//            [alert show];
-//			//[self showAlertWithTitle:@"NetWorkStatus" message:@"Internet Connection Required" delegate:nil];
-//           // [self didFailWithError:nil];
-//            [self closeFunction];
-//        
-//            return;
-//		}
-//        [NSURLConnection connectionWithRequest:theRequest delegate:self];
+	if (reach != nil)
+	{
+		NetworkStatus internetStatus = [reach currentReachabilityStatus];
+		
+		if (( internetStatus != ReachableViaWiFi) && (internetStatus != ReachableViaWWAN))
+		{
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            [self hideProgressView:Alert_UesrLocation];
+            UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"NetWorkStatus" message:@"Internet Connection Required." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            appDelegate().window.userInteractionEnabled = YES;
+            [self closeFunction];
+        
+            return;
+		}
      	m_connection = [[NSURLConnection alloc]initWithRequest:theRequest delegate:self];
-//    }
-    
+    }
 }
 
 -(void)closeFunction
@@ -157,18 +145,19 @@ static WebServiceInterface* sharedMyManager = nil;
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error 
 {
+    appDelegate().window.userInteractionEnabled = YES;
+
 	[m_connection release];
 	m_connection = nil;
 	NSLog(@"Connection failed: %@", [error description]);
+    [self hideProgressView:Alert_UesrLocation];
+    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error!" message:@"Server not responding." delegate:nil
+                                       cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [alert show];
+    [alert release];
     
-    if(showActivityIndicator)
-    {
-      [self removeLoadingView];
-    }
-      [activityIndicatorView stopAnimating];
      appDelegate().window.userInteractionEnabled = YES;
     [(UIViewController*)m_callBackTarget view].userInteractionEnabled = YES;
-    
     if(Alert_UesrLocation !=nil)
 	{
 		[Alert_UesrLocation dismissWithClickedButtonIndex:0 animated:YES];
@@ -178,13 +167,11 @@ static WebServiceInterface* sharedMyManager = nil;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    
-      [activityIndicatorView removeFromSuperview];
+    appDelegate().window.userInteractionEnabled = YES;
 	[m_connection release];
 	m_connection = nil;
 	
 	NSString *responseString = [[NSString alloc] initWithData:dataResponse encoding:NSUTF8StringEncoding];
-	//NSLog(@"response string ---%@",responseString);
 	[dataResponse release];
 	dataResponse = nil;
 	
@@ -193,13 +180,8 @@ static WebServiceInterface* sharedMyManager = nil;
 	
 	[json release];
 	json = nil;
-	
-    // NSLog(@"array---%@",response);
-    
-	[responseString release];	
+	[responseString release];
 	responseString = nil;
-    
-    
    
     @try
     {
@@ -208,71 +190,22 @@ static WebServiceInterface* sharedMyManager = nil;
     @catch (NSException *exception) {
     }
    
-    
-    if(showActivityIndicator)
-    {
-      [self removeLoadingView];
-    }
-    [activityIndicatorView stopAnimating];
-    appDelegate().window.userInteractionEnabled = YES;
 }
 
 #pragma mark Loader added
--(void)LoadingView
-{
-   // av=[[UIAlertView alloc] initWithTitle:@"Loading Data" message:@"" delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-   // UIActivityIndicatorView *ActInd=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-   // [ActInd startAnimating];
-   // [ActInd setFrame:CGRectMake(125, 50, 37, 37)];
-   // [av addSubview:ActInd];
-   // [av show];
-    activityIndicatorView = [[IndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite text:@"Loading" superview:[(UIViewController*)m_callBackTarget view]];
-   [activityIndicatorView startAnimating];
-    
-    
-}
 
--(void)removeLoadingView
-{
-    [av dismissWithClickedButtonIndex:0 animated:YES];
-    [av release];
-    av=nil;
-    /*
-    if([objalfaAppDeligate.notificationData count]==0)
-    {
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:nil message:@"No notification for now." delegate:self
-                                           cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-    }
-     */
-}
-
-
-//Creating Progreessview wth label
 - (UIAlertView *)createProgressViewToParentView:(UIView *)view withTitle:(NSString *)title
 {
 	Alert_UesrLocation = [[UIAlertView alloc] initWithTitle:@"" message:title delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
 	[Alert_UesrLocation show];
 	
-	UIActivityIndicatorView *loaderView = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(130, 60, 25, 25)];
-	loaderView.tag = 3333;
-	loaderView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
-	loaderView.backgroundColor = [UIColor clearColor];
-	[Alert_UesrLocation addSubview:loaderView];
-	[loaderView startAnimating];
 	return Alert_UesrLocation;
 	
 }
-- (void)hideProgressView:(UIAlertView *)inProgressView
-{
-    
-	if(Alert_UesrLocation !=nil)
-	{
+- (void)hideProgressView:(UIAlertView *)inProgressView{
+	if(Alert_UesrLocation !=nil){
 		[Alert_UesrLocation dismissWithClickedButtonIndex:0 animated:YES];
 		Alert_UesrLocation = nil;
-		
-		
 	}
 }
 

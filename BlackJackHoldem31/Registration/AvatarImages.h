@@ -7,7 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DDPageControl.h"
 
-@interface AvatarImages : NSObject
+@interface AvatarImages : NSObject<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UIAlertViewDelegate,UIScrollViewDelegate>
+{
+    UIView                      * view_Background;
+    UIView                      *customiseAlertView;
+    UIView                      *bgView;
+    int                         alert_width;
+    int                         alert_height;
+    UICollectionView            *_collectionView;
+    NSMutableArray              *imagesArray;
+    DDPageControl               *pageControl;
+}
++ (id)sharedManager;
+-(void)ShowViewWithImages:(UIView*)view;
+@property(nonatomic,strong)NSString                    *imageName;
+@property (nonatomic, retain) UIAlertView *progressView;
 
+@property(nonatomic,strong)void (^callBack)(NSString*);
 @end

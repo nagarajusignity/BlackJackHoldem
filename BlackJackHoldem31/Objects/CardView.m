@@ -14,7 +14,8 @@
 
 const CGFloat CardWidth =24;  //37.0f;   // this includes drop shadows
 const CGFloat CardHeight =36;   //59.0f;
-
+const CGFloat SmallCardWidth =12;  //37.0f;   // this includes drop shadows
+const CGFloat SmallCardHeight =13.5;   //59.0f;
 
 @implementation CardView
 {
@@ -26,6 +27,7 @@ const CGFloat CardHeight =36;   //59.0f;
 @synthesize card = _card;
 @synthesize successCallback;
 @synthesize isFirst;
+@synthesize isFirstBestCard,isSecondBestCard,isThirdBestCard;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -44,7 +46,8 @@ const CGFloat CardHeight =36;   //59.0f;
     {
         _backImageView = [[UIImageView alloc] initWithFrame:self.bounds];
         _backImageView.image = [UIImage imageNamed:@"Back"];
-        _backImageView.contentMode = UIViewContentModeScaleToFill;
+        //_backImageView.contentMode = UIViewContentModeScaleToFill;
+        _backImageView.contentMode=UIViewContentModeScaleAspectFit;
         [self addSubview:_backImageView];
     }
 }
@@ -116,42 +119,42 @@ const CGFloat CardHeight =36;   //59.0f;
     {
         if (player.position == PlayerPositionLTop)
         {
-            x += 365+70*isiPhone5();//435
-            y += 45 ;
+            x += 360+65*isiPhone5();//435
+            y += 5 ;//40
            
             
         }
         else if (player.position == PlayerPositionLMiddle)
         {
-            x += 380+90*isiPhone5();
-            y += 110;   //midY - CardWidth - 45.0f;
+            x += 385+90*isiPhone5();
+            y += 70;//100   //midY - CardWidth - 45.0f;
         }
         else if (player.position == PlayerPositionLBottom)
         {
-            x += 380+75*isiPhone5();
-            y += 232;
+            x += 375+70*isiPhone5();
+            y += 220;
         }
         
         else if (player.position == PlayerPositionMiddle)
         {
-            x += 230+40*isiPhone5();
-            y += 225;
+            x += 225+45*isiPhone5();
+            y += 220;
         }
         
         else if (player.position == PlayerPositionRBottom)
         {
-            x += 80+16*isiPhone5();
-            y += 230;
+            x += 75+21*isiPhone5();
+            y += 220;
         }
         else if (player.position == PlayerPositionRMiddle)
         {
-            x += 80;
-            y += 105;
+            x += 65;
+            y += 70;//100
         }
         else
         {
-            x += 90+25*isiPhone5();
-            y += 45;
+            x += 85+25*isiPhone5();
+            y += 5;//40
         }
         
     }
@@ -170,6 +173,38 @@ const CGFloat CardHeight =36;   //59.0f;
     {
         _frontImageView = [[UIImageView alloc] initWithFrame:self.bounds];
         _frontImageView.contentMode = UIViewContentModeScaleToFill;
+        _frontImageView.hidden = YES;
+        [self addSubview:_frontImageView];
+        
+        NSString *suitString;
+        switch (self.card.suit)
+        {
+            case SuitClubs:    suitString = @"Clubs"; break;
+            case SuitDiamonds: suitString = @"Diamonds"; break;
+            case SuitHearts:   suitString = @"Hearts"; break;
+            case SuitSpades:   suitString = @"Spades"; break;
+        }
+        
+        NSString *valueString;
+        switch (self.card.value)
+        {
+            case CardAce:   valueString = @"Ace"; break;
+            case CardJack:  valueString = @"Jack"; break;
+            case CardQueen: valueString = @"Queen"; break;
+            case CardKing:  valueString = @"King"; break;
+            default:        valueString = [NSString stringWithFormat:@"%d", self.card.value];
+        }
+        
+        NSString *filename = [NSString stringWithFormat:@"%@ %@", suitString, valueString];
+        _frontImageView.image = [UIImage imageNamed:filename];
+    }
+}
+- (void)loadBestHandCardsFront
+{
+    if (_frontImageView == nil)
+    {
+        _frontImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _frontImageView.contentMode = UIViewContentModeScaleAspectFit;
         _frontImageView.hidden = YES;
         [self addSubview:_frontImageView];
         
@@ -216,7 +251,7 @@ const CGFloat CardHeight =36;   //59.0f;
 
 - (void)animateDealingToPlayer:(Player *)player withDelay:(NSTimeInterval)delay angle:(float)angle Xvalue:(float)Xaxies Yvalue:(float)Yaxies;
 {
-    self.frame = CGRectMake(230.0f+45*isiPhone5(), 105.0f, CardWidth, CardHeight);
+    self.frame = CGRectMake(240.0f+45*isiPhone5(), 125.0f, SmallCardWidth, SmallCardHeight);
     self.transform = CGAffineTransformMakeRotation(M_PI);
     
     CGPoint point = [self centerForPlayer:player Xvalue:Xaxies Yvalue:Yaxies];
@@ -454,7 +489,7 @@ const CGFloat CardHeight =36;   //59.0f;
                 }
                 else
                 {
-                    x += 380;
+                    x += 390;
                     y += 220;
                 }
             }
@@ -467,7 +502,7 @@ const CGFloat CardHeight =36;   //59.0f;
                 }
                 else
                 {
-                    x += 377-CardWidth;
+                    x += 387-CardWidth;
                     y += 220;
                 }
             }
@@ -483,7 +518,7 @@ const CGFloat CardHeight =36;   //59.0f;
             }
             else
             {
-                x += 88;
+                x += 78;
                 y += 220;
             }
         }
@@ -496,7 +531,7 @@ const CGFloat CardHeight =36;   //59.0f;
             }
             else
             {
-                x += 85-CardWidth;
+                x += 75-CardWidth;
                 y += 220;
             }
         }
@@ -523,7 +558,7 @@ const CGFloat CardHeight =36;   //59.0f;
             {
                 if(isiPhone5())
                 {
-                x += 98;
+                x += 93;
                 y += 35;
                 }
                 else
@@ -537,7 +572,7 @@ const CGFloat CardHeight =36;   //59.0f;
             {
                 if(isiPhone5())
                 {
-                x += 95-CardWidth;
+                x += 90-CardWidth;
                 y += 35;
                 }
                 else
@@ -645,7 +680,7 @@ const CGFloat CardHeight =36;   //59.0f;
 
 -(void)animateFlopCardswithDelay:(NSTimeInterval)delay
 {
-    self.frame = CGRectMake(50+10*isiPhone5(), -40.0f, CardWidth, CardHeight);
+    self.frame = CGRectMake(100+6*isiPhone5(), -40.0f, CardWidth, CardHeight);//10
     self.transform = CGAffineTransformMakeRotation(M_PI);
     
     CGPoint point = [self centeronBoard];
@@ -662,11 +697,6 @@ const CGFloat CardHeight =36;   //59.0f;
 }
 -(CGPoint)centeronBoard
 {
-    CGRect rect = self.superview.bounds;
-    CGFloat midX = CGRectGetMidX(rect);
-    CGFloat midY = CGRectGetMidY(rect);
-    CGFloat maxX = CGRectGetMaxX(rect);
-    CGFloat maxY = CGRectGetMaxY(rect);
     
     CGFloat x  =10;
     CGFloat y  =10;
@@ -710,7 +740,7 @@ const CGFloat CardHeight =36;   //59.0f;
 
 -(void)animateTurnCardswithDelay:(NSTimeInterval)delay
 {
-    self.frame = CGRectMake(50+10*isiPhone5(), -40.0f, CardWidth, CardHeight);
+    self.frame = CGRectMake(100+6*isiPhone5(), -40.0f, CardWidth, CardHeight);//10
     self.transform = CGAffineTransformMakeRotation(M_PI);
     
     CGPoint point = [self turnCardsPositiononBoard];
@@ -791,11 +821,7 @@ const CGFloat CardHeight =36;   //59.0f;
 
 -(CGPoint)turnCardsPositiononBoard
 {
-    CGRect rect = self.superview.bounds;
-    CGFloat midX = CGRectGetMidX(rect);
-    CGFloat midY = CGRectGetMidY(rect);
-    CGFloat maxX = CGRectGetMaxX(rect);
-    CGFloat maxY = CGRectGetMaxY(rect);
+   // CGRect rect = self.superview.bounds;
     
     CGFloat x  =10;
     CGFloat y  =10;
@@ -839,7 +865,7 @@ const CGFloat CardHeight =36;   //59.0f;
 
 -(void)animateRiverCardswithDelay:(NSTimeInterval)delay
 {
-    self.frame = CGRectMake(50+10*isiPhone5(), -40.0f, CardWidth, CardHeight);
+    self.frame = CGRectMake(100+6*isiPhone5(), -40.0f, CardWidth, CardHeight);//10
     self.transform = CGAffineTransformMakeRotation(M_PI);
     
     CGPoint point = [self riverCardsPositiononBoard];
@@ -948,8 +974,6 @@ const CGFloat CardHeight =36;   //59.0f;
 
 - (void)animateCloseAndMoveFromPlayer:(Player *)fromPlayer value:(int)value
 {
-
-    
     if(fromPlayer == PlayerPositionLTop)
     {
         if(value==self.card.value)
@@ -958,6 +982,203 @@ const CGFloat CardHeight =36;   //59.0f;
     }
     }
 }
+- (void)animateCloseAndRemoveFoldCardsFromPlayer:(Player *)fromPlayer value:(int)value
+{
+    if(fromPlayer == PlayerPositionLTop)
+    {
+        if(value==self.card.value)
+        {
+            self.alpha=0.0;
+        }
+    }
+}
+- (void)animateTheCradsToMoveAsideForPlayer:(Player *)fromPlayer value:(int)value OnFirstTime :(BOOL)firstTime
+{
+    CGRect rect = self.superview.bounds;
+    CGFloat midX = CGRectGetMidX(rect);
+    //CGFloat midY = CGRectGetMidY(rect);
+    CGFloat maxY = CGRectGetMaxY(rect);
+    //if(fromPlayer == PlayerPositionLTop)
+    {
+        if(value==self.card.value)
+        {
+            if(firstTime==YES)
+            {
+                if(isiPhone5())
+                {
+                    self.center =CGPointMake(midX-42, maxY - CardHeight-40);
+                }
+                else
+                {
+                    self.center =CGPointMake(midX-43, maxY - CardHeight-40);
+                }
+            }
+            else
+            {
+                if(isiPhone5())
+                {
+                    self.center =CGPointMake(midX+42,maxY - CardHeight-40);
+                }
+                else
+                {
+                    self.center =CGPointMake(midX+43, maxY - CardHeight-40 );
+                }
+            }
+        }
+    }
+}
+-(void)animateBestHandCardsTurnOverWithsuccess:(CompletionBlock)callback
+{
+    [self loadBestHandCardsFront];
+    [self.superview bringSubviewToFront:self];
+    
+    UIImageView *darkenView = [[UIImageView alloc] initWithFrame:self.bounds];
+    darkenView.backgroundColor = [UIColor clearColor];
+    darkenView.image = [UIImage imageNamed:@"Darken"];
+    darkenView.alpha = 0.0f;
+    [self addSubview:darkenView];
+    
+    CGPoint startPoint = self.center;
+    CGPoint endPoint = [self centeronBoardForBestHands];
+    CGFloat afterAngle =0;   //= [self angleForPlayer:player];
+    
+    CGPoint halfwayPoint = CGPointMake((startPoint.x + endPoint.x)/2.0f, (startPoint.y + endPoint.y)/2.0f);
+    CGFloat halfwayAngle = (_angle + afterAngle)/2.0f;
+    
+    [UIView animateWithDuration:0.15f
+                          delay:0.0f
+                        options:UIViewAnimationOptionCurveEaseIn
+                     animations:^
+     {
+         CGRect rect = _backImageView.bounds;
+         rect.size.width = 1.0f;
+         _backImageView.bounds = rect;
+         
+         darkenView.bounds = rect;
+         darkenView.alpha = 0.5f;
+         
+         self.center = halfwayPoint;
+         self.transform = CGAffineTransformScale(CGAffineTransformMakeRotation(halfwayAngle), 1.2f, 1.2f);
+     }
+                     completion:^(BOOL finished)
+     {
+         _frontImageView.bounds = _backImageView.bounds;
+         _frontImageView.hidden = NO;
+         
+         [UIView animateWithDuration:0.15f
+                               delay:0
+                             options:UIViewAnimationOptionCurveEaseOut
+                          animations:^
+          {
+              CGRect rect = _frontImageView.bounds;
+              rect.size.width = 25;
+              _frontImageView.bounds = rect;
+              
+              darkenView.bounds = rect;
+              darkenView.alpha = 0.0f;
+              
+              self.center = endPoint;
+              self.transform = CGAffineTransformMakeRotation(afterAngle);
+          }
+                          completion:^(BOOL finished)
+          {
+              [darkenView removeFromSuperview];
+              [self unloadBack];
+          }];
+     }];
+    successCallback= callback;
+    successCallback();
+}
+-(void)animateBestHandsCardsWithDelay:(NSTimeInterval)delay
+{
+    self.frame = CGRectMake(0,-8, SmallCardWidth, SmallCardHeight);
+    self.transform = CGAffineTransformMakeRotation(0);
+    
+    CGPoint point = [self centeronBoardForBestHands];
+    _angle =0;
+    [UIView animateWithDuration:0.2f
+                          delay:delay
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^
+     {
+         self.center = point;
+         self.transform = CGAffineTransformMakeRotation(_angle);
+     }
+                     completion:nil];
+}
+-(CGPoint)centeronBoardForBestHands
+{
+    CGFloat x ;
+    CGFloat y ;
+    if (self.card.isTurnedOver)
+    {
+        if(isFirstBestCard==YES)
+        {
+            x = 10;
+            y = 15 ;
+            isFirstBestCard=NO;
+            isSecondBestCard=NO;
+            isThirdBestCard=NO;
+        }
+        else if(isSecondBestCard==YES)
+        {
+            x = 30;
+            y = 15 ;
+            isFirstBestCard=NO;
+            isSecondBestCard=NO;
+            isThirdBestCard=NO;
+        }
+        else if (isThirdBestCard==YES)
+        {
+            x = 50;
+            y = 15 ;
+            isFirstBestCard=NO;
+            isSecondBestCard=NO;
+            isThirdBestCard=NO;
+        }
+    }
+    else
+    {
+        if(isFirstBestCard==YES)
+        {
+            isFirst =YES;
+            x = 10;
+            y = 15 ;
+            isFirstBestCard=NO;
+            isSecondBestCard=NO;
+            isThirdBestCard=NO;
+        }
+        else if(isSecondBestCard==YES)
+        {
+            x = 30;
+            y = 15 ;
+            isFirstBestCard=NO;
+            isSecondBestCard=NO;
+            isThirdBestCard=NO;
+        }
+        else if(isThirdBestCard==YES)
+        {
+            x = 50;
+            y = 15 ;
+            isFirstBestCard=NO;
+            isSecondBestCard=NO;
+            isThirdBestCard=NO;
+        }
+    }
+    return CGPointMake(x, y);
+}
+- (void)animateBestHandCardsForAllPlayersWithValue:(int)value
+{
+    if(value==self.card.value)
+    {
+        self.alpha=1.0;
+    }
+    else
+    {
+        self.alpha=0.5;
+    }
+}
+
 
 @end
 
